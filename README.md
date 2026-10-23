@@ -14,3 +14,10 @@ Standalone Flask project for Render. This is a new project; it does not modify t
 - This site records order requests; it does not take or verify payments. Do not mark an order paid until you verify payment independently.
 - On Render free instances, the local SQLite database may not persist across redeploys/restarts. For production, use a persistent disk or managed database (e.g. PostgreSQL).
 - Only advertise packages and services you can actually deliver, and comply with the game's terms.
+
+## Base de datos permanente (PostgreSQL)
+Sin `DATABASE_URL` la web usa SQLite en `/tmp`, que se borra al reiniciar o redeployar en Render gratis.
+Para que precios, productos y pedidos no se pierdan:
+1. Creá un proyecto gratis en https://neon.com y copiá la connection string **directa** (Connection pooling apagado).
+2. En Render > Environment agregá `DATABASE_URL` con ese valor y `SECRET_KEY` con un texto largo.
+3. Guardá y redeployá. En `/admin/catalogo` tiene que aparecer "Base de datos permanente conectada".
