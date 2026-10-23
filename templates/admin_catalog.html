@@ -1,0 +1,75 @@
+{% extends 'base.html' %}{% block title %}Catálogo | Administración{% endblock %}{% block content %}
+<section class="section">
+{% include '_dbstatus.html' %}
+<div class="section-title"><div><div class="eyebrow">ADMINISTRACIÓN</div><h1>Catálogo y precios</h1></div><a class="navbtn" href="{{ url_for('admin') }}">← Pedidos</a></div>
+
+<form method="post" action="{{ url_for('admin_rate') }}" class="order-card admin-form">
+<h3>Cotización del dólar</h3>
+<label>1 USD = ($ pesos argentinos)<input name="rate" value="{{ rate|usd }}" inputmode="decimal" required></label>
+<div class="btnrow"><button class="cta">Guardar cotización</button></div>
+</form>
+
+<h2 class="sub">Estrellas de Free Fire</h2>
+<div class="orders">
+{% for p in packages %}
+<form method="post" action="{{ url_for('admin_package') }}" class="order-card admin-form">
+<input type="hidden" name="id" value="{{ p.id }}">
+<div class="order-head"><b>{{ p.stars }} estrellas</b>{% if not p.active %}<span class="status">OCULTO</span>{% endif %}</div>
+<div class="agrid">
+<label>Estrellas<input name="stars" value="{{ p.stars }}" inputmode="numeric" required></label>
+<label>Precio USD<input name="price" value="{{ p.price|usd }}" inputmode="decimal" required></label>
+<label>Precio anterior (tachado)<input name="old_price" value="{{ p.old_price|usd if p.old_price else '' }}" inputmode="decimal"></label>
+<label>Etiqueta (ej: OFERTA)<input name="label" value="{{ p.label }}" maxlength="30"></label>
+</div>
+<label>Link de pago de AstroPay<input name="astropay_link" value="{{ p.astropay_link }}" maxlength="500"></label>
+<label class="check"><input type="checkbox" name="active" {% if p.active %}checked{% endif %}> Visible en la tienda</label>
+<div class="btnrow"><button class="cta" name="action" value="save">Guardar</button><button class="navbtn danger" name="action" value="delete" onclick="return confirm('¿Eliminar este paquete?')">Eliminar</button></div>
+</form>
+{% endfor %}
+<form method="post" action="{{ url_for('admin_package') }}" class="order-card admin-form new">
+<div class="order-head"><b>+ Agregar paquete de estrellas</b></div>
+<div class="agrid">
+<label>Estrellas<input name="stars" inputmode="numeric" required placeholder="Ej: 100"></label>
+<label>Precio USD<input name="price" inputmode="decimal" required placeholder="Ej: 60"></label>
+<label>Precio anterior (tachado)<input name="old_price" inputmode="decimal" placeholder="Opcional"></label>
+<label>Etiqueta (ej: OFERTA)<input name="label" maxlength="30" placeholder="Opcional"></label>
+</div>
+<label>Link de pago de AstroPay<input name="astropay_link" maxlength="500" placeholder="https://onetouch.astropay.com/..."></label>
+<label class="check"><input type="checkbox" name="active" checked> Visible en la tienda</label>
+<div class="btnrow"><button class="cta" name="action" value="save">Agregar</button></div>
+</form>
+</div>
+
+<h2 class="sub">Venta de hack para PC</h2>
+<div class="orders">
+{% for p in products %}
+<form method="post" action="{{ url_for('admin_product') }}" class="order-card admin-form">
+<input type="hidden" name="id" value="{{ p.id }}">
+<div class="order-head"><b>{{ p.name }}</b>{% if not p.active %}<span class="status">OCULTO</span>{% endif %}</div>
+<label>Nombre<input name="name" value="{{ p.name }}" maxlength="80" required></label>
+<label>Descripción<textarea name="description" rows="3" maxlength="400">{{ p.description }}</textarea></label>
+<div class="agrid">
+<label>Precio USD<input name="price" value="{{ p.price|usd }}" inputmode="decimal" required></label>
+<label>Precio anterior (tachado)<input name="old_price" value="{{ p.old_price|usd if p.old_price else '' }}" inputmode="decimal"></label>
+<label>Etiqueta (ej: OFERTA)<input name="label" value="{{ p.label }}" maxlength="30"></label>
+</div>
+<label>Link de pago de AstroPay<input name="astropay_link" value="{{ p.astropay_link }}" maxlength="500"></label>
+<label class="check"><input type="checkbox" name="active" {% if p.active %}checked{% endif %}> Visible en la tienda</label>
+<div class="btnrow"><button class="cta" name="action" value="save">Guardar</button><button class="navbtn danger" name="action" value="delete" onclick="return confirm('¿Eliminar este producto?')">Eliminar</button></div>
+</form>
+{% endfor %}
+<form method="post" action="{{ url_for('admin_product') }}" class="order-card admin-form new">
+<div class="order-head"><b>+ Agregar panel / producto</b></div>
+<label>Nombre<input name="name" maxlength="80" required placeholder="Nombre del panel"></label>
+<label>Descripción<textarea name="description" rows="3" maxlength="400" placeholder="Opcional"></textarea></label>
+<div class="agrid">
+<label>Precio USD<input name="price" inputmode="decimal" required placeholder="Ej: 10"></label>
+<label>Precio anterior (tachado)<input name="old_price" inputmode="decimal" placeholder="Opcional"></label>
+<label>Etiqueta (ej: OFERTA)<input name="label" maxlength="30" placeholder="Opcional"></label>
+</div>
+<label>Link de pago de AstroPay<input name="astropay_link" maxlength="500" placeholder="https://onetouch.astropay.com/..."></label>
+<label class="check"><input type="checkbox" name="active" checked> Visible en la tienda</label>
+<div class="btnrow"><button class="cta" name="action" value="save">Agregar</button></div>
+</form>
+</div>
+</section>{% endblock %}
